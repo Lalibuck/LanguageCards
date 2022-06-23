@@ -9,29 +9,26 @@ def make_day_word():
     word = random_word()
     defin = definition(word)
     dayword = DayWord.objects.create(word=word, definition=defin)
-    dayword_id = dayword.get_index()
     for lang in languages:
-        DayWordInLanguages.objects.create(language=lang, text=words_of_a_day(lang, word), word_id=dayword_id)
+        DayWordInLanguages.objects.create(language=lang, text=words_of_a_day(lang, word))
 
 
 
 def main(request):
-    if len(DayWord.objects.filter(added_date=datetime.date.today())):
-        word = DayWord.objects.filter(added_date=datetime.date.today())
+    if len(DayWord.objects.filter(added_date__gte=datetime.date.today())):
+        word = DayWord.objects.filter(added_date__gte=datetime.date.today())
     else:
         make_day_word()
-        word = DayWord.objects.filter(added_date=datetime.date.today())
+        word = DayWord.objects.filter(added_date__gte=datetime.date.today())
     return render(request, 'main.html', {'words': word})
 
-def word(request):
+def word(request, date):
 
-    if len(DayWord.objects.filter(added_date=datetime.date.today())):
+    if len(DayWord.objects.filter(added_date__gte=datetime.date.today())):
         make_day_word()
-        word = DayWord.objects.filter(added_date=datetime.date.today())
+        word = DayWord.objects.filter(added_date__gte=datetime.date.today())
     else:
-        word = DayWord.objects.filter(added_date=datetime.date.today())
+        word = DayWord.objects.filter(added_date__gte=datetime.date.today())
     return render(request, 'main.html', {'words': word})
-
-
 
 
