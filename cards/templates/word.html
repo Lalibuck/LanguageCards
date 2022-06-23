@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+    <h1>LanguageCardsLearn</h1>
+{% endblock %}
+{% block content %}
+    <h2>Word of a day</h2>
+    <h3>{{ word }}</h3>
+    <h4>{{ word.definition }}</h4>
+    <ul>
+        {% for translate in word.DayWordInLanguages_set.all %}
+            {{ translate.language }} ----- {{ translate.text }}
+    </ul>
+{% endblock %}

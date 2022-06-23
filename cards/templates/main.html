@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}
+<h1>LanguageCardsLearn</h1>
+{% endblock %}
+{% block content %}
+<h3>Helping you to improve your language skills</h3>
+<h2>Word of a day</h2>
+{% for word in words %}
+    <h4><a href="{{word.get_url}}">{{ word }}</a></h4>
+{% endfor %}
+{% endblock %}
