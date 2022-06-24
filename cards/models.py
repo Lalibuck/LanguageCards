@@ -12,7 +12,7 @@ class Meaning(models.Model):
 
 
 class LearningToMeaning(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     learning = models.ForeignKey(Learning, on_delete=models.CASCADE)
     meaning = models.ForeignKey(Meaning, on_delete=models.CASCADE)
     learning_rate = models.IntegerField()
@@ -38,10 +38,10 @@ class DayWord(models.Model):
 
 
 class DayWordInLanguages(models.Model):
-    word_id = models.ForeignKey(DayWord, on_delete=models.CASCADE)
+    word = models.ForeignKey(DayWord, on_delete=models.CASCADE)
     language = models.CharField(max_length=250)
     text = models.CharField(max_length=250)
 
     def __str__(self):
-        self.text
+        return self.text
 
