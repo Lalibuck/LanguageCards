@@ -3,18 +3,13 @@ from django.db import models
 from django.urls import reverse
 
 
-class Learning(models.Model):
-    word = models.CharField(unique=True, max_length=250)
-
-
-class Meaning(models.Model):
-    word = models.CharField(unique=True, max_length=250)
-
+class Words(models.Model):
+    lword = models.CharField(unique=True, max_length=250)
+    mword = models.CharField(unique=True, max_length=250)
 
 class LearningToMeaning(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    learning = models.ForeignKey(Learning, on_delete=models.CASCADE)
-    meaning = models.ForeignKey(Meaning, on_delete=models.CASCADE)
+    words = models.ForeignKey(Words, null=True, on_delete=models.CASCADE)
     learning_rate = models.IntegerField()
     added_time = models.DateField(auto_now_add=True)
     learning_time = models.DateField()

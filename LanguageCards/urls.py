@@ -9,6 +9,7 @@ urlpatterns = [
     path('signup/', reg_v.register, name='signup'),
     path('', include('django.contrib.auth.urls'), name='login'),
     path('', include('django.contrib.auth.urls'), name='logout'),
-    path('word/<str:date>/', cards_v.word, name='word')
+    path('word/<str:date>/', cards_v.word, name='word'),
+    path('add/', cards_v.add, name='add')
 ]
 
