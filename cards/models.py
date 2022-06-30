@@ -3,18 +3,22 @@ from django.db import models
 from django.urls import reverse
 
 
+
 class Words(models.Model):
-    lword = models.CharField(unique=True, max_length=250)
-    mword = models.CharField(unique=True, max_length=250)
+
+    lword = models.CharField(max_length=250)
+    mword = models.CharField(max_length=250)
+
 
 class LearningToMeaning(models.Model):
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     words = models.ForeignKey(Words, null=True, on_delete=models.CASCADE)
     learning_rate = models.IntegerField()
-    added_time = models.DateField(auto_now_add=True)
-    learning_time = models.DateField()
+    added_time = models.DateTimeField(auto_now_add=True)
+    learning_time = models.DateTimeField()
     learning_lang = models.CharField(max_length=250)
-    meaning_lang = models.CharField(max_length=250)
+    meaning_lang = models.CharField(default='en', max_length=250)
 
 
 class DayWord(models.Model):
@@ -39,4 +43,3 @@ class DayWordInLanguages(models.Model):
 
     def __str__(self):
         return self.text
-

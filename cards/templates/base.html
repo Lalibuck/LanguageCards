@@ -10,6 +10,7 @@
     <nav class="nav flex-column">
         {% if user.is_authenticated %}
             {{ user.username }}
+            <a href="/vocabulary">My vocabulary</a>
             <a href="/logout">Logout</a>
         {% else %}
             <a href="/login">Login</a>

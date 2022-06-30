@@ -5,7 +5,7 @@
 {% block content %}
 <h3>Add a new word</h3>
 <h5>{{ad_word}}</h5>
-<form method="post" action="/add/">
+<form method="post">
         {% csrf_token %}
     <select name="language" id="language">
         <option value="ru">Russian</option>
@@ -14,17 +14,19 @@
         <option value="es">Spanish</option>
         <option value="it">Italian</option>
     </select>
-    <fieldset>
-        {% for field in form %}
-            <div class="control-group
-                {% if field.errors %}has-error{% endif %}">
-                <div>{{ field }}</div>
-            </div>
-        {% endfor %}
-    </fieldset>
-     <div class="form-actions">
-        <button type="submit" class="btn btn-primary">
+    Learning word:<br>
+        <input type="text" name="lword" value={{lword}}>
+        <br>
+    Meaning word:<br>
+        <input type="text" name="mword" value={{mword}}>
+        <br><br>
+     <label class="form-actions">
+        <button type="submit" class="btn btn-primary" formaction="/add/">
         Save</button>
-    </div>
-</form>
-{% endblock %}
+    </label>
+    <label>
+        <button type="submit" class="btn btn-primary" formaction="/translate/">
+        Translate</button>
+    </label>
+  </form>
+    {% endblock %}

@@ -1,12 +1,13 @@
 import requests
 import json
 
-def translate(fromlang, text, to):
+def translate_word(fromlang, text):
+
 	url = "https://cheap-translate.p.rapidapi.com/translate"
 	payload = {
 		"fromLang": fromlang,
 		"text": text,
-		"to": to
+		"to": 'en'
 	}
 	headers = {
 		"content-type": "application/json",
@@ -18,9 +19,9 @@ def translate(fromlang, text, to):
 
 
 def random_word():
-	url = "https://random-word-api.herokuapp.com/word"
+	url = "https://random-words-api.vercel.app/word"
 	response = requests.request("GET", url)
-	return json.loads(response.text)[0]
+	return json.loads(response.text)[0]['word']
 
 def definition(word):
 	url = "https://dictionary-by-api-ninjas.p.rapidapi.com/v1/dictionary"
@@ -35,15 +36,18 @@ def definition(word):
 
 def words_of_a_day(lang, text):
 
-	url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
-	payload = "q={}&target={}&source=en".format(text, lang)
-	headers = {
-		"content-type": "application/x-www-form-urlencoded",
-		"Accept-Encoding": "application/gzip",
-		"X-RapidAPI-Key": "47e8381166msh29eed1d31927cf6p1164d7jsnf7268929f90f",
-		"X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
-	}
-	response = requests.request("POST", url, data=payload, headers=headers)
-	trans_word = json.loads(response.text)
-	return trans_word['data']['translations'][0]['translatedText']
+	url = "https://microsoft-translator-text.p.rapidapi.com/translate"
 
+	querystring = {"to[0]": lang, "api-version": "3.0", "profanityAction": "NoAction", "textType": "plain"}
+
+	payload = [{"Text": text}]
+	headers = {
+		"content-type": "application/json",
+		"X-RapidAPI-Key": "47e8381166msh29eed1d31927cf6p1164d7jsnf7268929f90f",
+		"X-RapidAPI-Host": "microsoft-translator-text.p.rapidapi.com"
+	}
+
+	response = requests.request("POST", url, json=payload, headers=headers, params=querystring)
+
+	trans_word = json.loads(response.text)
+	return trans_word[0]['translations'][0]['text']

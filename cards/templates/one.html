@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+<h1>LanguageCardsLearn</h1>
+{% endblock %}
+{% block content %}
+{% if message %}
+<p>{{message}}</p>
+<form action="/learn/one/" method="post" id="form1">
+    {% csrf_token %}
+<button type="submit" name="next">Next</button>
+    </form>
+{% else %}
+<h3> Type word meaning</h3>
+<h5>Word:</h5>
+{% for word in words %}
+<p>{{word.lword}}</p>
+{% endfor %}
+<form action="/learn/one/" method="post" id="form2">
+    {% csrf_token %}
+    {% for var in vars %}
+    <input type="radio" name="mean" value={{var}}>
+    <label>{{var}}</label><br>
+    {% endfor %}
+    <button type="submit" form="form2" name="check">Check</button>
+</form>
+{% endif %}
+{% endblock %}
