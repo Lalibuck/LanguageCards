@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 {% block title %}
-    <h1>LanguageCardsLearn</h1>
+<div class="text-center">
+<h1 class="text-danger">LanguageCardsLearn</h1>
+    </div>
 {% endblock %}
 {% block content %}
+<div class="text-center">
     <h2>Word of a day</h2>
     {% for word in words %}
-    <h3>{{ word }}</h3>
+    <h3 class="text-success">{{ word }}</h3>
     <h4>{{ word.definition }}</h4>
-    <ul>
+    <ul class="list-group">
         {% for translate in word.daywordinlanguages_set.all %}
-            <li>{{ translate.language }} ----- {{ translate.text }}</li>
-        {% endfor %}
+        <div class="text-center">
+            <li class="list-group-item list-group-item-info">{{ translate.language }} ----- {{ translate.text }}</li>
+        </div>
+            {% endfor %}
     </ul>
+</div>
     {% endfor %}
 {% endblock %}

@@ -183,9 +183,10 @@ def type(request):
             return render(request, 'type.html', {'words': query, 'message': message})
 
 
+@login_required(login_url='/login/')
 def vocab(request):
     if request.method == 'POST':
-          query = Words.objects.filter(learningtomeaning__learning_lang=request.POST.get('language')).filter(learningtomeaning__user=request.user)
+          query = Words.objects.filter(learningtomeaning__learning_lang=request.POST.get('language')).filter(learningtomeaning__user=request.user).order_by('learningtomeaning__learning_rate', 'learningtomeaning__learning_time')
           if query.exists():
               return render(request, 'vocab.html', {'query': query})
           else:

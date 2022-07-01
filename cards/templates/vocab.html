@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% block title %}
-<h1>LanguageCardsLearn</h1>
+<div class="text-center">
+<h1 class="text-danger">LanguageCardsLearn</h1>
+    </div>
 {% endblock %}
 {% block content %}
-<h3>Learning words</h3>
+<h3 class="text-center">Learning words</h3>
+<p>Choose language</p>
 <form method="post" >
         {% csrf_token %}
     <select name="language" id="language">
@@ -18,12 +21,24 @@
         Choose</button>
 </form>
 <h4>{{ error }}</h4>
+<table class="table-bordered">
+       <thead>
+    <tr>
+      <th scope="col">Word</th>
+      <th scope="col">Meaning</th>
+      <th scope="col">Learning rate</th>
+    </tr>
+  </thead>
 {% for learn in query %}
-    <ul>
         {% for word in learn.learningtomeaning_set.all %}
-            <li>{{ learn.lword }} ----- {{ learn.mword }}  ----- {{ word.learning_rate }}</li>
+         <tbody>
+         <tr>
+      <td>{{ learn.lword }}</td>
+      <td>{{ learn.mword }}</td>
+      <td>{{ word.learning_rate }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
     {% endfor %}
-
+        </table>
 {% endblock %}
