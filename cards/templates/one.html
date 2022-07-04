@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}
-<h1>LanguageCardsLearn</h1>
+<div class="text-center">
+<h1 class="text-danger">LanguageCardsLearn</h1>
+    </div>
 {% endblock %}
 {% block content %}
 {% if message %}
@@ -10,7 +12,7 @@
 <button type="submit" name="next">Next</button>
     </form>
 {% else %}
-<h3> Type word meaning</h3>
+<h3> Choose word meaning</h3>
 <h5>Word:</h5>
 {% for word in words %}
 <p>{{word.lword}}</p>
