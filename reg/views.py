@@ -1,5 +1,4 @@
 from .forms import RegisterForm
-
 from django.shortcuts import render, redirect
 
 

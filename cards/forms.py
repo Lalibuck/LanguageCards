@@ -1,13 +1,15 @@
 from .models import Words
 from django import forms
 
-def is_not_empty(form): # form validation
+def is_not_empty(form):
+    """form validation"""
     if form:
         return True
     else:
         return False
 
-class LearningForm(forms.Form):  # adding learn word form
+class LearningForm(forms.Form):
+    """adding learn word form"""
     lword = forms.CharField(max_length=250)
     mword = forms.CharField(max_length=250)
 
