@@ -51,14 +51,14 @@ def update_word(query, answer):
         word.save()
 
 
-def four_var(query):
+def four_var(query, lang):
     """one from four game"""
     vars = []
     true_word = Words.objects.get(id=query)
     """getting the right answer"""
     vars.append(true_word.mword)
     """getting three another random options"""
-    some_words = Words.objects.exclude(id=query).order_by('?')[:3]
+    some_words = Words.objects.exclude(id=query).filter(learningtomeaning__meaning_lang=lang).order_by('?')[:3]
     for word in some_words:
         vars.append(word.mword)
     """option shuffling"""
@@ -101,8 +101,8 @@ def add(request):
                                              words=Words.objects.get(id=form.pk),
                                              learning_rate=1,
                                              learning_time=datetime.datetime.now() + datetime.timedelta(days=1),
-                                             learning_lang=request.POST.get('language'),
-                                             meaning_lang='en'
+                                             learning_lang=request.POST.get('learnlang'),
+                                             meaning_lang=request.POST.get('meanlang')
                                              )
             form = LearningForm()
             return render(request, 'add.html', {
@@ -126,7 +126,7 @@ def add(request):
 def translate(request):
     """translation (if necessary) adding words"""
     if request.method == 'POST':
-        mword = words_of_a_day('en', request.POST.get('lword'))
+        mword = words_of_a_day(request.POST.get('meanlang'), request.POST.get('lword'))
         """translation using microsoft translator api"""
         lword = request.POST.get('lword')
         return render(request, 'add.html', {
@@ -138,11 +138,11 @@ def translate(request):
 def learn(request):
     """choosing the learning game page"""
     if request.method == "POST":
+        request.session['learnlang'] = request.POST.get('learnlang')
+        request.session['meanlang'] = request.POST.get('meanlang')
         if request.POST.get('game') == 'type':
-            request.session['language'] = request.POST.get('language')
             return redirect('type/')
         elif request.POST.get('game') == 'one':
-            request.session['language'] = request.POST.get('language')
             return redirect('one/', request.POST.get('language'))
     else:
         return render(request, 'learn.html')
@@ -151,7 +151,8 @@ def learn(request):
 def one(request):
     """one-from-four game"""
     if request.method == 'POST' and 'check' in request.POST:  # checking the answer
-        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['language'],
+        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['learnlang'],
+                                     learningtomeaning__meaning_lang=request.session['meanlang'],
                                      learningtomeaning__user=request.user,
                                      learningtomeaning__learning_time__lte=datetime.datetime.now()).order_by(
             'learningtomeaning__learning_rate', 'learningtomeaning__learning_time')
@@ -171,7 +172,8 @@ def one(request):
 
         return render(request, 'one.html', {'words': query, 'message': message})
     else:
-        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['language'],
+        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['learnlang'],
+                                     learningtomeaning__meaning_lang=request.session['meanlang'],
                                      learningtomeaning__user=request.user,
                                      learningtomeaning__learning_time__lte=datetime.datetime.now(), ).order_by(
             'learningtomeaning__learning_rate', 'learningtomeaning__learning_time')
@@ -180,7 +182,7 @@ def one(request):
         if query.exists():
             """have words to learn"""
             """generating four options"""
-            vars = four_var(query)
+            vars = four_var(query, request.session['meanlang'])
             return render(request, 'one.html', {'words': query, 'vars': vars})
         else:
             """no words match"""
@@ -191,7 +193,8 @@ def one(request):
 def type(request):
     if request.method == 'POST' and 'check' in request.POST:
         """checking the answer"""
-        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['language'],
+        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['learnlang'],
+                                     learningtomeaning__meaning_lang=request.session['meanlang'],
                                      learningtomeaning__user=request.user,
                                      learningtomeaning__learning_time__lte=datetime.datetime.now()).order_by(
             'learningtomeaning__learning_rate', 'learningtomeaning__learning_time')
@@ -209,7 +212,8 @@ def type(request):
 
         return render(request, 'type.html', {'words': query, 'message': message})
     else:
-        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['language'],
+        query = Words.objects.filter(learningtomeaning__learning_lang=request.session['learnlang'],
+                                     learningtomeaning__meaning_lang=request.session['meanlang'],
                                      learningtomeaning__user=request.user,
                                      learningtomeaning__learning_time__lte=datetime.datetime.now(), ).order_by(
             'learningtomeaning__learning_rate', 'learningtomeaning__learning_time')
@@ -225,8 +229,10 @@ def type(request):
 def vocab(request):
     """generate the list of learning words by language"""
     if request.method == 'POST':
-        query = Words.objects.filter(learningtomeaning__learning_lang=request.POST.get('language')).filter(
-            learningtomeaning__user=request.user).order_by('learningtomeaning__learning_rate',
+        query = Words.objects.filter(learningtomeaning__learning_lang=request.POST.get('learnlang'),
+                                     learningtomeaning__meaning_lang=request.POST.get('meanlang'),
+                                        learningtomeaning__user=request.user
+                                     ).order_by('learningtomeaning__learning_rate',
                                                            'learningtomeaning__learning_time')
         if query.exists():
             """checking the existence of the list by opting params"""

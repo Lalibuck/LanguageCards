@@ -2,22 +2,6 @@ import requests
 import json
 
 
-def translate_word(fromlang, text):
-    url = "https://cheap-translate.p.rapidapi.com/translate"
-    payload = {
-        "fromLang": fromlang,
-        "text": text,
-        "to": 'en'
-    }
-    headers = {
-        "content-type": "application/json",
-        "X-RapidAPI-Key": "47e8381166msh29eed1d31927cf6p1164d7jsnf7268929f90f",
-        "X-RapidAPI-Host": "cheap-translate.p.rapidapi.com"
-    }
-    response = requests.request("POST", url, json=payload, headers=headers)
-    return json.loads(response.text)['translatedText']
-
-
 def random_word():
     url = "https://random-words-api.vercel.app/word"
     response = requests.request("GET", url)
