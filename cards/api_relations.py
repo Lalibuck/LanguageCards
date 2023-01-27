@@ -3,9 +3,17 @@ import json
 
 
 def random_word():
-    url = "https://random-words-api.vercel.app/word"
-    response = requests.request("GET", url)
-    return json.loads(response.text)[0]['word']
+    url = "https://random-word-by-api-ninjas.p.rapidapi.com/v1/randomword"
+
+    querystring = {"type": "verb"}
+
+    headers = {
+        "X-RapidAPI-Key": "47e8381166msh29eed1d31927cf6p1164d7jsnf7268929f90f",
+        "X-RapidAPI-Host": "random-word-by-api-ninjas.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    return json.loads(response.text)['word']
 
 
 def definition(word):
